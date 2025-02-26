@@ -1,9 +1,11 @@
 import React from 'react';
-
+import logo from '../../assets/logo1.png'
 const Home = () => {
     return (
         <div>
-            <h1 className='text-7xl font-bold'>Test</h1>
+          <div>
+            <img src={logo} alt="" />
+          </div>
         </div>
     );
 };

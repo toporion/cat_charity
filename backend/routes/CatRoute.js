@@ -1,0 +1,8 @@
+const createCat = require('../controllers/CatController')
+const imageUpload = require('../middlewares/fileUploader')
+
+const route=require('express').Router()
+
+route.post('/cat',imageUpload.single('profileImage'),createCat)
+
+module.exports=route;

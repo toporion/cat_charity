@@ -9,6 +9,7 @@ const ShowDetails = () => {
         queryKey: ['item', id],
         queryFn: async () => {
             const res = await axios.get(`https://cat-charity-sgdi.vercel.app/api/cat/${id}`);
+            console.log('see all details include multi image',res.data.getCat)
             return res.data.getCat;
         },
     });
@@ -25,7 +26,7 @@ const ShowDetails = () => {
                         <img 
                             src={item.profileImage} 
                             alt={item.name} 
-                            className="w-48 h-48 object-cover rounded-lg border"
+                            className="w-64 h-64 object-cover rounded-lg border"
                         />
                     </div>
                     <div className="p-4">
@@ -62,6 +63,34 @@ const ShowDetails = () => {
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div className="p-4 flex flex-col items-center bg-gray-50">
+                    <h3 className="text-lg font-semibold mb-2">Medical History File</h3>
+                    {item.medicalHistoryFile && (
+                        <>
+                            <img 
+                                src={item.medicalHistoryFile} 
+                                alt="Medical History" 
+                                className="w-64 h-64 object-contain border rounded-lg mb-2"
+                            />
+                            <a 
+                                href={item.medicalHistoryFile} 
+                                download="medical_history.jpg" 
+                                className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    const link = document.createElement('a');
+                                    link.href = item.medicalHistoryFile;
+                                    link.setAttribute('download', 'medical_history.jpg');
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                }}
+                            >
+                                Download
+                            </a>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

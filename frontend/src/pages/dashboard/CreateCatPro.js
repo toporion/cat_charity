@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import bgImage from "../../assets/bgCat.jpg"; // Import your background image
+import bgImage from "../../assets/bgCat.jpg"; // Background Image
 import sideImg from "../../assets/2.jpg";
 import axios from "axios";
 
 export default function CatForm() {
   const { register, handleSubmit, reset } = useForm();
+
   const onSubmit = async (data) => {
     console.log(data);
     const formData = new FormData();
@@ -16,16 +17,21 @@ export default function CatForm() {
     formData.append("adoptionStatus", data.adoptionStatus);
     formData.append("medicalHistory", data.medicalHistory);
     formData.append("profileDetails", data.profileDetails);
-    formData.append("rescueDate", data.rescueDate); // Add rescueDate to formData
+    formData.append("rescueDate", data.rescueDate);
+
     if (data.profileImage && data.profileImage.length > 0) {
       formData.append("profileImage", data.profileImage[0]);
     }
+
+    if (data.medicalHistoryFile && data.medicalHistoryFile.length > 0) {
+      formData.append("medicalHistoryFile", data.medicalHistoryFile[0]);
+    }
+
     try {
       const res = await axios.post("https://cat-charity-sgdi.vercel.app/api/cat", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" }
       });
+
       reset();
       console.log(res.data);
     } catch (error) {
@@ -109,10 +115,10 @@ export default function CatForm() {
               className="w-full p-2 rounded bg-white/20 text-white placeholder-gray-300 focus:outline-none"
             />
 
-            {/* Medical History */}
+            {/* Medical History (Text) */}
             <textarea
               {...register("medicalHistory")}
-              placeholder="Medical History"
+              placeholder="Medical History (Optional)"
               className="w-full p-2 rounded bg-white/20 text-white placeholder-gray-300 focus:outline-none"
             ></textarea>
 
@@ -124,10 +130,21 @@ export default function CatForm() {
             ></textarea>
 
             {/* Profile Image */}
-            <div className="w-full text-center">
+            <div className="w-full text-center border">
+              <label className="text-white mr-2">Profile Image</label>
               <input
                 type="file"
                 {...register("profileImage")}
+                className="text-white cursor-pointer file:bg-white/20 file:text-white file:rounded file:border-none file:px-3 file:py-1"
+              />
+            </div>
+
+            {/* Medical History File (PDF/Image) */}
+            <div className="w-full text-center border">
+              <label className="text-white mr-2">Medical File (Image/PDF)</label>
+              <input
+                type="file"
+                {...register("medicalHistoryFile")}
                 className="text-white cursor-pointer file:bg-white/20 file:text-white file:rounded file:border-none file:px-3 file:py-1"
               />
             </div>

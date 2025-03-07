@@ -3,7 +3,11 @@ const imageUpload = require('../middlewares/fileUploader')
 
 const route=require('express').Router()
 
-route.post('/cat',imageUpload.single('profileImage'),createCat)
+route.post('/cat', imageUpload.fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'medicalHistoryFile', maxCount: 1 }
+]), createCat);
+
 route.get('/cat',getAllCats)
 route.delete('/cat/:id',deleteCat)
 route.get('/cat/:id',getCatById)

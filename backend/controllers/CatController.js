@@ -1,28 +1,36 @@
 const ModelCat = require("../models/CatModel");
 
 
-const createCat=async(req,res)=>{
-    try{
-        const catdata=req.body;
-        const profileImage=req.file ? req.file.path :null;
-        const newcat=await ModelCat({
+const createCat = async (req, res) => {
+    try {
+        const catdata = req.body;
+        const files = req.files; // Use req.files instead of req.file
+
+        const profileImage = files.profileImage ? files.profileImage[0].path : null;
+        const medicalHistoryFile = files.medicalHistoryFile ? files.medicalHistoryFile[0].path : null;
+
+        const newCat = new ModelCat({
             ...catdata,
-            profileImage
-        })
-        await newcat.save()
+            profileImage,
+            medicalHistoryFile
+        });
+
+        await newCat.save();
+
         res.status(200).json({
-            success:true,
-            message:"successfully created cat profile",
-            data:newcat
-        })
-    }catch(error){
-        console.log('see cat error',error)
+            success: true,
+            message: "Successfully created cat profile",
+            data: newCat
+        });
+    } catch (error) {
+        console.error('see cat error', error);
         res.status(500).json({
-            success:false,
-            message:"internal server error"
-        })
+            success: false,
+            message: "Internal server error"
+        });
     }
-}
+};
+
 const updateById=async(req,res)=>{
     try{
         const {id}=req.params;

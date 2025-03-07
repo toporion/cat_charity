@@ -2,49 +2,57 @@ const UserModel = require("../models/UserModel");
 const bcrypt=require('bcryptjs')
 const jwt = require("jsonwebtoken");
 
-const createUser=async(req,res)=>{
-    try{
-        const {email,password}=req.body;
-        const user=await UserModel.findOne({email})
-        if (user){
-            return res.status(400).json({
-                success:false,
-                message:"User already exist"
-            })
-        }
-        const blogImage=req.file?req.file.path : null;
-        const hashPassword=await bcrypt.hash(password,10)
-        const newUser=await UserModel({
-            ...req.body,
-            blogImage,
-            password:hashPassword
-        })
-        await newUser.save()
-        res.status(200).json({
-            success:true,
-            message:"User successfully created",
-            data:newUser
-        })
+const createUser = async (req, res) => {
+    try {
+        console.log("Uploaded File:", req.file);  // Debug: Check if multer processed the file
+        console.log("Request Body:", req.body);
 
-    }catch(error){
-        console.log('check controller error',error)
+        const { email, password } = req.body;
+        const user = await UserModel.findOne({ email });
+
+        if (user) {
+            return res.status(400).json({
+                success: false,
+                message: "User already exists"
+            });
+        }
+
+        const profileImage = req.file ? req.file.path : null;
+        const hashPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new UserModel({
+            ...req.body,
+            profileImage,
+            password: hashPassword
+        });
+
+        await newUser.save();
+
+        res.status(200).json({
+            success: true,
+            message: "User successfully created",
+            data: newUser
+        });
+
+    } catch (error) {
+        console.error("Error in createUser:", error);
         res.status(500).json({
-            
-            success:false,
-            message:"internal server error"
-        })
+            success: false,
+            message: "Internal server error"
+        });
     }
-}
+};
+
 const updateUser=async(req,res)=>{
     try{
         const {name,email,password,role,profileIamge}=req.body;
         const {id}=req.params;
         let updateData={name,email,password,role,profileIamge}
-        const blogImage=req.file?req.file.path : null;
+        const profileImage=req.file?req.file.path : null;
         const updateUser=await UserModel.findByIdAndUpdate(
             id,
             updateData,
-            blogImage,
+            profileImage,
             {new:true}
         )
         if(!updateData){
@@ -54,7 +62,7 @@ const updateUser=async(req,res)=>{
         res.status(200).json({
              message: "Employee updated successfully",
              success:true,
-             data:updateEmployee
+             data:updateUser
              });
         
         const hashPassword=await bcrypt.hash(password,10)
@@ -177,11 +185,54 @@ const deleteUserById=async(req,res)=>{
     }
 }
 
+const makeRole = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { role } = req.body;
+  
+      // Validate the role field
+      if (!role || (role !== "admin" && role !== "user")) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid role provided. Allowed values are 'admin' or 'user'."
+        });
+      }
+  
+      // Update the user's role in the database
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        id,
+        { role: role },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found."
+        });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "User role updated successfully.",
+        data: updatedUser
+      });
+    } catch (error) {
+      console.error("Error in makeRole:", error);
+      return res.status(500).json({
+        success: false,
+        message: "Internal server error."
+      });
+    }
+  };
+  
+
 module.exports={
 createUser,
 userLogin,
 getAllUser,
 getUserById,
 deleteUserById,
-updateUser
+updateUser,
+makeRole
 }

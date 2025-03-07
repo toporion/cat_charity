@@ -2,13 +2,17 @@ import { useForm } from 'react-hook-form';
 import cat from '../../assets/3.jpg';
 import logo from '../../assets/happyPaws.png';
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 export default function RegisterForm() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm();
+    const navigate=useNavigate()
 
     const onSubmit = async (data) => {
         console.log(data);
@@ -24,12 +28,23 @@ export default function RegisterForm() {
         }
 
         try {
-            const res = await axios.post('http://localhost:8080/api/register', formData, {
+            const res = await axios.post('https://cat-charity-sgdi.vercel.app/api/register', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
+                
             });
             console.log(res.data);
+            
+            // Show SweetAlert on successful registration
+            Swal.fire({
+                title: 'Welcome to Happy Paws',
+                text: 'Registration Successful',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            reset()
+            navigate('/login')
         } catch (error) {
             console.error('Error:', error.response?.data || error.message);
         }
@@ -44,41 +59,37 @@ export default function RegisterForm() {
                 </div>
 
                 {/* Right Side - Form */}
-                <div className="w-1/2 p-6 relative">
+                <div className="w-1/2 p-6 relative text-black">
                     <img src={logo} alt="Logo" className="absolute top-0 right-0 w-20 m-4" />
-                    <h2 className="text-2xl font-bold text-white text-center mb-6">Please Register</h2>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <h2 className="text-2xl font-bold text-black text-center mb-6">Please Register</h2>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-black">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-white">Name</label>
-                                <input type="text" {...register("name", { required: "Name is required" })} className="w-full p-2 rounded bg-gray-400 text-white" />
+                                <label className="text-black">Name</label>
+                                <input type="text" {...register("name", { required: "Name is required" })} className="w-full p-2 rounded bg-gray-400 text-black" />
                                 {errors.name && <p className="text-red-400 text-sm">{errors.name.message}</p>}
                             </div>
                             <div>
-                                <label className="text-white">Email</label>
-                                <input type="email" {...register("email", { required: "Email is required" })} className="w-full p-2 rounded bg-gray-400 text-white" />
+                                <label className="text-black">Email</label>
+                                <input type="email" {...register("email", { required: "Email is required" })} className="w-full p-2 rounded bg-gray-400 text-black" />
                                 {errors.email && <p className="text-red-400 text-sm">{errors.email.message}</p>}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-white">Password</label>
-                                <input type="password" {...register("password", { required: "Password is required" })} className="w-full p-2 rounded bg-gray-400 text-white" />
+                                <label className="text-black">Password</label>
+                                <input type="password" {...register("password", { required: "Password is required" })} className="w-full p-2 rounded bg-gray-400 text-black" />
                                 {errors.password && <p className="text-red-400 text-sm">{errors.password.message}</p>}
                             </div>
                             <div>
-                                <label className="text-white">Role</label>
-                                <select {...register("role")} className="w-full p-2 rounded bg-gray-400 text-white">
+                                <label className="text-black">Role</label>
+                                <select {...register("role")} className="w-full p-2 rounded bg-gray-400 text-black">
                                     <option value="user">User</option>
-                                    <option value="admin">Admin</option>
                                 </select>
                             </div>
                         </div>
-                        <div>
-                            <label className="text-white">Profile Image</label>
-                            <input type="file" {...register("profileImage")} className="w-full p-2 rounded bg-gray-400 text-white" />
-                        </div>
-                        <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Register</button>
+                        <p className='text-black'>Don't have an account? <span><Link to={'/login'}>Login</Link></span></p>
+                        <button type="submit" className="w-full bg-blue-500 text-black p-2 rounded hover:bg-blue-600">Register</button>
                     </form>
                 </div>
             </div>

@@ -11,7 +11,7 @@ const CatManagement = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/api/cat")
+      .get("https://cat-charity-sgdi.vercel.app/api/cat")
       .then((response) => {
         if (response.data.success) {
           setCats(response.data.data);

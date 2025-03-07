@@ -9,6 +9,7 @@ const Dashboard = () => {
                 <Menu/>
             </div>
             <div className='bg-white min-h-screen'>
+                
                 <Outlet/>
             </div>
         </div>

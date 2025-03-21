@@ -119,7 +119,7 @@ const ProfileCreate = () => {
             </div>
             <div className="flex border justify-between">
               <p className="text-end bg-orange-100 w-1/2">photo</p>
-              <input type="file" {...register('photo', { required: false })} className="w-1/2" />
+              <input type="file" {...register('profileImage', { required: false })} className="w-1/2" />
             </div>
           </div>
         </div>

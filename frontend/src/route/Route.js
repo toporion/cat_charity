@@ -8,6 +8,7 @@ import AllUsers from "../pages/dashboard/AllUsers";
 import CatList from "../pages/dashboard/CatList";
 import CatManagement from "../pages/dashboard/CatManagement";
 import CreateCatPro from "../pages/dashboard/CreateCatPro";
+import ProfileCreate from "../pages/dashboard/ProfileCreate";
 import ShowDetails from "../pages/dashboard/ShowDetails";
 import Update from "../pages/dashboard/Update";
 import User from "../pages/dashboard/User";
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
         {
           path:'update/:id',
           element:<Update/>
+        },
+        {
+          path:'profile',
+          element:<ProfileCreate/>
         }
       ]
     }

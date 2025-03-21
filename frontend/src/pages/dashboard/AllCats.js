@@ -27,10 +27,17 @@ const AllCats = () => {
 
   return (
     <div className="container py-10">
-      <h1 className="text-3xl font-bold mb-6"> Cats  for Adoption</h1>
+      <h1 className="text-3xl font-bold mb-6">Cats for Adoption</h1>
       <div className="cat-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {cats.map((cat) => (
-          <div key={cat._id} className="cat-card border p-4 rounded shadow">
+          <div key={cat._id} className="cat-card border p-4 rounded shadow relative">
+            <div
+              className={`absolute top-2 right-2 px-3 py-1 rounded text-white text-sm ${
+                cat.adoptionStatus === "adopted" ? "bg-red-500" : "bg-green-500"
+              }`}
+            >
+              {cat.adoptionStatus === "adopted" ? "Adopted" : "Available"}
+            </div>
             <img
               src={cat.profileImage}
               alt={cat.name}
@@ -39,13 +46,7 @@ const AllCats = () => {
             <h3 className="mt-2 text-xl font-semibold">{cat.name}</h3>
             <p>Age: {cat.age} years</p>
             <p>Status: {cat.status}</p>
-            <p>
-              Adoption Status:{" "}
-              <span style={{ color: cat.adoptionStatus === "adopted" ? "red" : "green" }}>
-                {cat.adoptionStatus}
-              </span>
-            </p>
-            {cat.adoptionStatus === "in rescue" && (
+            {cat.adoptionStatus !== "adopted" && (
               <button
                 onClick={() => handleAdopt(cat._id)}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"

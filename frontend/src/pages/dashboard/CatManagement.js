@@ -25,7 +25,7 @@ const CatManagement = () => {
     { accessorKey: "name", header: "Name" },
     { accessorKey: "age", header: "Age" },
     { accessorKey: "status", header: "Status" },
-    { accessorKey: "microchip", header: "Microchip", cell: (info) => (info.getValue() ? "Yes" : "No") },
+    { accessorKey: "chipNo", header: "Microchip Number", cell: (info) => info.getValue() || "N/A" },
     { accessorKey: "neutered", header: "Neutered", cell: (info) => (info.getValue() ? "Yes" : "No") },
     { accessorKey: "adoptionStatus", header: "Adoption Status" },
   ];

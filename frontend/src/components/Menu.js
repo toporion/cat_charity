@@ -18,10 +18,7 @@ const Menu = () => {
         <div className='bg-white mb-4 relative z-50'>
             <div className='flex justify-between items-center px-4 h-16'>
                 <Link to={'/'}><img src={logo} alt="Logo" className='w-20 object-contain' /></Link>
-                <div className='hidden md:flex w-1/2 items-center border px-2'>
-                    <FaSearch className='text-gray-400' />
-                    <input type="text" className='outline-none bg-white w-full px-2 h-10' placeholder="Search..." />
-                </div>
+              
                 <div className='hidden md:flex gap-4 items-center'>
                     <FaBell />
                     {isAuthenticated ? (

@@ -2,12 +2,14 @@ import React from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import UseAuth from '../../hook/UseAuth';
 
 const AllRequests = () => {
+  const { loading: authLoading } = UseAuth();
   const queryClient = useQueryClient();
 
   // Fetch all adoption requests
-  const { data: allRequests = [] } = useQuery({
+  const { data: allRequests = [], isLoading } = useQuery({
     queryKey: ['requests'],
     queryFn: async () => {
       const res = await axios.get('https://cat-charity-sgdi.vercel.app/api/adoptions');
@@ -56,6 +58,10 @@ const AllRequests = () => {
       }
     });
   };
+
+  if (authLoading || isLoading) {
+    return <p className="text-center text-gray-600">Loading...</p>;
+  }
 
   return (
     <div className="p-10">

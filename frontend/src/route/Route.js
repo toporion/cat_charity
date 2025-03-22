@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         },
         {
           path:'createCat',
-          element:<CreateCatPro/>
+          element:<ProfileCreate/>
         },
         {
           path:'catDetails',
